@@ -1,0 +1,25 @@
+name: Android CICD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        # Execute unit tests
+      - name: Unit tests
+        run: bash ./gradlew test --stacktrace
+        # Generate an Apk
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Get Debug APK
+        uses: actions/upload-artifact@v2.1.4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
